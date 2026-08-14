@@ -74,6 +74,7 @@ public class PedidoAdapterLista extends RecyclerView.Adapter<PedidoAdapterLista.
             intent.putExtra("productos_detalle", productosTexto.toString());
             intent.putExtra("observaciones_cliente", pedido.getObservaciones());
             intent.putExtra("total_pedido", pedido.getTotal());
+            intent.putExtra("estado_pedido", pedido.getEstado());
 
             context.startActivity(intent);
         });

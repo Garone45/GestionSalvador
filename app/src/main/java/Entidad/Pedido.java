@@ -3,7 +3,7 @@ package Entidad;
 import com.google.firebase.firestore.DocumentId;
 import java.util.List;
 
-public class Pedido {
+public class    Pedido {
 
     @DocumentId
     private String id;

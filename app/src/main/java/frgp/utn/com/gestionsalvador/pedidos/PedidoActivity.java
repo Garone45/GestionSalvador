@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.ImageButton;
 
 import Adaptadores.PedidoAdapterLista;
 import Entidad.Pedido;
@@ -65,11 +66,21 @@ public class PedidoActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton btnHistorial = findViewById(R.id.btnHistorial);
+        btnHistorial.setOnClickListener(v -> {
+            Intent intent = new Intent(PedidoActivity.this, HistorialPedidoActivity.class);
+            startActivity(intent);
+        });
+
         // Llamamos a la función que descarga todo de Firebase
         cargarPedidosDesdeFirestore();
     }
 
     private void cargarPedidosDesdeFirestore() {
+        // 1. Calculamos el límite de hace 24 horas respecto al momento actual
+        long hace24Horas = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault());
+
         db.collection("pedidos")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -79,7 +90,18 @@ public class PedidoActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Pedido pedido = document.toObject(Pedido.class);
                             pedido.setId(document.getId()); // Aseguramos que guarde bien el ID
-                            listaPedidos.add(pedido);
+
+                            // 2. Filtramos por fecha: solo agregamos si tiene menos de 24 horas
+                            if (pedido.getFecha() != null) {
+                                try {
+                                    java.util.Date fechaPedido = sdf.parse(pedido.getFecha());
+                                    if (fechaPedido != null && fechaPedido.getTime() >= hace24Horas) {
+                                        listaPedidos.add(pedido);
+                                    }
+                                } catch (java.text.ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
 
                         // Si el adaptador ya existe, solo le avisamos que los datos cambiaron.
