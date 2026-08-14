@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+    <!-- Título de la Sección -->
+    <TextView
+        android:id="@+id/tvTituloPedidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pedidos del Día"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Botón de Historial (Sutil, arriba a la derecha) -->
+    <ImageButton
+        android:id="@+id/btnHistorial"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_recent_history"
+        app:tint="#1B4332"
+        android:contentDescription="Ver historial de pedidos" />
+
+    <!-- ¡ACÁ ESTÁ LA LISTA INYECTADA! -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_pedidos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tvTituloPedidos"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        tools:listitem="@layout/item_pedido" />
+
+    <!-- Mensaje de Estado Vacío (Con ID nuevo agregado) -->
+    <LinearLayout
+        android:id="@+id/ll_estado_vacio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@android:drawable/ic_menu_agenda"
+            app:tint="#BDBDBD"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aún no hay pedidos registrados."
+            android:textSize="18sp"
+            android:textColor="#757575"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tocá el botón + para iniciar la carga."
+            android:textSize="14sp"
+            android:textColor="#9E9E9E"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+
+    <!-- Botón Flotante para Nuevo Pedido -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNuevoPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@android:drawable/ic_input_add"
+        app:tint="#FFFFFF"
+        app:backgroundTint="#1B4332"
+        android:contentDescription="Crear nuevo pedido" />
+
+    <!-- Botón Flotante de Volver -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Volver al Menú"
+        android:src="@drawable/ic_arrow_back"
+        app:tint="@android:color/white"
+        app:backgroundTint="#1B4332" />
+
+</RelativeLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Barrita verde decorativa a la izquierda -->
+        <View
+            android:id="@+id/viewDecorativa"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="#0D47A1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Nombre y Apellido -->
+        <TextView
+            android:id="@+id/tvItemNombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:text="Nombre Apellido"
+            android:textColor="#0D47A1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tvItemTelefono"
+            app:layout_constraintStart_toEndOf="@+id/viewDecorativa"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Teléfono (Alineado a la derecha) -->
+        <TextView
+            android:id="@+id/tvItemTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="1123456789"
+            android:textColor="#0D47A1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/tvItemNombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvItemNombre" />
+
+        <!-- Calle y Altura -->
+        <TextView
+            android:id="@+id/tvItemDireccion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:text="Calle Falsa 123"
+            android:textColor="#0D47A1"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewDecorativa"
+            app:layout_constraintTop_toBottomOf="@+id/tvItemNombre" />
+
+        <!-- Localidad / Zona (Con un fondito gris sutil) -->
+        <TextView
+            android:id="@+id/tvItemLocalidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="#E0E0E0"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="Victoria"
+            android:textColor="#0D47A1"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewDecorativa"
+            app:layout_constraintTop_toBottomOf="@+id/tvItemDireccion" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

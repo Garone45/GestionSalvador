@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "305670423453",
+    "project_id": "verduleriaapp-5ef51",
+    "storage_bucket": "verduleriaapp-5ef51.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305670423453:android:3ce497bbf336535318a574",
+        "android_client_info": {
+          "package_name": "frgp.utn.com.gestionsalvador"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDaJdEhAq8pizqWpQndwixYV199eYqgfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

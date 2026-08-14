@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1B4332">
+
+    <!-- ================= HEADER VERDE ================= -->
+    <ImageView
+        android:id="@+id/btn_volver"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_arrow_back"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Pedido"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_volver"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_volver" />
+
+    <TextView
+        android:id="@+id/tv_subtitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregá productos a tu pedido"
+        android:textColor="#E0E0E0"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_titulo" />
+
+    <!-- ================= CONTENEDOR BLANCO CON CURVAS ================= -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_curvas_blancas"
+        android:paddingTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_resumen"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitulo">
+
+        <!-- Buscador Simulado -->
+        <EditText
+            android:id="@+id/et_buscar"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="24dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Buscar productos..."
+            android:paddingHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Filtros (Chips simulados con un Scroll) -->
+        <HorizontalScrollView
+            android:id="@+id/scroll_filtros"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="24dp"
+            android:scrollbars="none"
+            app:layout_constraintTop_toBottomOf="@+id/et_buscar">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnTodas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#1B4332"
+                    android:text="Todas"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnVerduras"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#F5F5F5"
+                    android:text="Verduras"
+                    android:textColor="#333333" />
+
+                <Button
+                    android:id="@+id/btnFrutas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#F5F5F5"
+                    android:text="Frutas"
+                    android:textColor="#333333" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_label_productos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Productos"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scroll_filtros" />
+
+        <!-- LISTA DE PRODUCTOS (RecyclerView) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_catalogo_productos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_productos"
+            tools:listitem="@layout/item_catalogo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ================= PANEL INFERIOR (RESUMEN Y BOTÓN) ================= -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_resumen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/tv_cant_productos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 productos"
+            android:textColor="#2E7D32"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_total_estimado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Total estimado"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_precio_total"
+            app:layout_constraintEnd_toStartOf="@+id/tv_precio_total"
+            app:layout_constraintTop_toTopOf="@+id/tv_precio_total" />
+
+        <TextView
+            android:id="@+id/tv_precio_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_continuar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#1B4332"
+            android:text="Continuar ->"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_precio_total" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
