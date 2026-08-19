@@ -1,63 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center"
-    android:background="#FFFFFF">
+    android:background="#F5F5F5">
 
-    <!-- Título de la App -->
-    <TextView
+    <!-- HEADER INSTITUCIONAL -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Adminsa"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="#2E7D32"
-        android:gravity="center"
-        android:layout_marginBottom="48dp"/>
+        android:background="#1B4332"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnPedidos"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Frutas y Verduras"
+            android:textColor="#D8F3DC"
+            android:textSize="16sp"
+            android:letterSpacing="0.05"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SALVADOR"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gestión de Pedidos"
+            android:textColor="#B7E4C7"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- CONTENEDOR DE BOTONES -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Pedidos"
-        android:textSize="18sp"
-        android:padding="16dp"
-        app:icon="@drawable/ic_pedido"
-        app:iconGravity="start"
-        app:iconPadding="11dp"
-        app:iconTint="#FFFFFF"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp">
 
-    <Button
-        android:id="@+id/btnClientes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Clientes"
-        android:textSize="18sp"
-        android:padding="16dp"
-        android:layout_marginBottom="1dp"
-        app:icon="@drawable/ic_cliente"
-        app:iconGravity="start"
-        app:iconPadding="11dp"
-        app:iconTint="#FFFFFF" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnMercaderia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mercadería"
-        android:textSize="18sp"
-        android:padding="16dp"
-        android:layout_marginBottom="16dp"
-        app:icon="@drawable/ic_mercaderia"
-        app:iconGravity="start"
-        app:iconPadding="9dp"
-        app:iconTint="#FFFFFF"/>
+            <!-- 1. BOTÓN PEDIDOS -->
+            <Button
+                android:id="@+id/btnPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#1B4332"
+                android:text="📦 Pedidos"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                android:elevation="4dp"/>
 
+            <!-- 2. BOTÓN CLIENTES -->
+            <Button
+                android:id="@+id/btnClientes"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#1B4332"
+                android:text="👥 Clientes"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                android:elevation="4dp"/>
 
+            <!-- 3. BOTÓN MERCADERÍA -->
+            <Button
+                android:id="@+id/btnMercaderia"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#1B4332"
+                android:text="🍎 Mercadería"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"
+                android:elevation="4dp"/>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CCCCCC"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- 4. BOTÓN REPORTES (DESTACADO EN OTRO TONO DE VERDE) -->
+            <Button
+                android:id="@+id/btnReportes"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:backgroundTint="#2D6A4F"
+                android:text="📈 Reportes y Caja Diaria"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                android:elevation="6dp"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

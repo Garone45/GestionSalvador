@@ -2,6 +2,7 @@ package Entidad;
 
 import com.google.firebase.firestore.DocumentId;
 import java.io.Serializable;
+
 public class Producto implements Serializable {
 
     @DocumentId
