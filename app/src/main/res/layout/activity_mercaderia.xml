@@ -6,26 +6,28 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- HEADER UNIFICADO (Verde Oliva / Natural) -->
+    <!-- HEADER UNIFICADO -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#558B2F"
+        android:background="#2D6A4F"
         android:padding="16dp">
 
+        <!-- Botón de volver (Alineado a la izquierda y centrado verticalmente) -->
         <ImageView
             android:id="@+id/btn_volver_mercaderia"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
             android:padding="12dp"
             android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Volver"
             app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Título (Centrado perfectamente en el header) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,10 +35,10 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_volver_mercaderia"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_volver_mercaderia" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,15 +53,29 @@
         android:paddingHorizontal="8dp"
         android:clipToPadding="false"/>
 
-    <!-- BOTÓN VOLVER (Abajo de todo) -->
+    <!-- BOTÓN AGREGAR PRODUCTO -->
     <Button
-        android:id="@+id/btnVolver"
+        android:id="@+id/btn_agregar_producto"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="50dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="24dp"
-        android:text="Volver al Menú"
-        android:backgroundTint="#558B2F"
+        android:layout_marginBottom="8dp"
+        android:text="Agregar Producto"
+        android:backgroundTint="#2D6A4F"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"/>
+
+    <!-- BOTÓN ELIMINAR PRODUCTO -->
+    <Button
+        android:id="@+id/btn_eliminar_producto"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:text="Eliminar Producto"
+        android:backgroundTint="#9E2A2B"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"

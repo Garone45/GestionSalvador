@@ -1,10 +1,13 @@
 package frgp.utn.com.gestionsalvador.mercaderia;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // TUS CLASES
 import Entidad.Producto;
@@ -46,13 +51,35 @@ public class MercaderiaActivity extends AppCompatActivity {
         // Llamamos a la función que trae los datos de Firestore
         cargarListaDesdeFirestore();
 
-        // 1. Botón de la flechita en el Header (Verde Oliva)
+        // 1. Botón de la flechita en el Header para volver
         ImageView btnVolverHeader = findViewById(R.id.btn_volver_mercaderia);
         btnVolverHeader.setOnClickListener(v -> finish());
 
-        // 2. Botón de abajo "Volver al Menú"
-        Button btnVolverAbajo = findViewById(R.id.btnVolver);
-        btnVolverAbajo.setOnClickListener(v -> finish());
+        // 2. Botón de abajo "Agregar Producto" (Abre la ventanita flotante)
+        Button btnAgregarProducto = findViewById(R.id.btn_agregar_producto);
+        btnAgregarProducto.setOnClickListener(v -> {
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_agregar_producto, null);
+
+            EditText etNombre = dialogView.findViewById(R.id.et_nombre_combo);
+            EditText etPrecio = dialogView.findViewById(R.id.et_precio_combo);
+
+            new AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setPositiveButton("Guardar", (dialog, which) -> {
+                        String nombre = etNombre.getText().toString().trim();
+                        String precioStr = etPrecio.getText().toString().trim();
+
+                        if (nombre.isEmpty() || precioStr.isEmpty()) {
+                            Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        double precio = Double.parseDouble(precioStr);
+                        guardarNuevoComboEnFirestore(nombre, precio);
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        });
     }
 
     private void cargarListaDesdeFirestore() {
@@ -75,5 +102,20 @@ public class MercaderiaActivity extends AppCompatActivity {
                     }
                 });
     }
-}
 
+    private void guardarNuevoComboEnFirestore(String nombre, double precio) {
+        Map<String, Object> producto = new HashMap<>();
+        producto.put("nombre", nombre);
+        producto.put("precio", precio);
+
+        db.collection("productos")
+                .add(producto)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "¡Combo agregado con éxito!", Toast.LENGTH_SHORT).show();
+                    cargarListaDesdeFirestore(); // Recarga la lista en el momento
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error al guardar el combo", Toast.LENGTH_SHORT).show();
+                });
+    }
+}
