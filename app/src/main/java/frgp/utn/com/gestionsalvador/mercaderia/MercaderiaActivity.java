@@ -74,8 +74,35 @@ public class MercaderiaActivity extends AppCompatActivity {
                             return;
                         }
 
-                        double precio = Double.parseDouble(precioStr);
-                        guardarNuevoComboEnFirestore(nombre, precio);
+                        // Limpia y convierte el precio de forma segura
+                        guardarNuevoComboEnFirestore(nombre, precioStr);
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        });
+        // 3. Botón de abajo "Eliminar Producto" (Abre un listado para elegir cuál borrar)
+        Button btnEliminarProducto = findViewById(R.id.btn_eliminar_producto);
+        btnEliminarProducto.setOnClickListener(v -> {
+            if (listaProductos.isEmpty()) {
+                Toast.makeText(this, "No hay productos para eliminar", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Extraemos los nombres de todos los productos cargados en la lista
+            String[] nombresProductos = new String[listaProductos.size()];
+            for (int i = 0; i < listaProductos.size(); i++) {
+                nombresProductos[i] = listaProductos.get(i).getNombre();
+            }
+
+            // Mostramos un diálogo flotante con la lista para seleccionar
+            new AlertDialog.Builder(this)
+                    .setTitle("Seleccioná el producto a eliminar")
+                    .setItems(nombresProductos, (dialog, which) -> {
+                        // Obtenemos exactamente el producto que tocó el usuario
+                        Producto productoSeleccionado = listaProductos.get(which);
+
+
+                        confirmarYBorrarProducto(productoSeleccionado);
                     })
                     .setNegativeButton("Cancelar", null)
                     .show();
@@ -83,39 +110,79 @@ public class MercaderiaActivity extends AppCompatActivity {
     }
 
     private void cargarListaDesdeFirestore() {
+        // Usamos addSnapshotListener en lugar de .get() para velocidad instantánea con caché local
         db.collection("productos")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        listaProductos.clear(); // Limpiamos la lista por las dudas
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Toast.makeText(MercaderiaActivity.this, "Error al traer mercadería", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Convertimos el documento de Firebase a un objeto Producto
+                    if (value != null) {
+                        listaProductos.clear();
+
+                        for (QueryDocumentSnapshot document : value) {
                             Producto p = document.toObject(Producto.class);
+
+                            if (p.getId() == null) {
+                                p.setId(document.getId());
+                            }
+
                             listaProductos.add(p);
                         }
 
-                        // Le avisamos al Adapter que ya tenemos los datos listos para dibujar
+                        // Refrescamos el adaptador al instante
                         adapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(MercaderiaActivity.this, "Error al traer mercadería", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void guardarNuevoComboEnFirestore(String nombre, double precio) {
+    private void guardarNuevoComboEnFirestore(String nombre, String precioStr) {
+        precioStr = precioStr.replace(" ", "").replace(".", "").replace(",", ".");
+
+        double precioFinal = 0.0;
+        try {
+            precioFinal = Double.parseDouble(precioStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "El precio ingresado no es válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Map<String, Object> producto = new HashMap<>();
         producto.put("nombre", nombre);
-        producto.put("precio", precio);
+        producto.put("precio_venta", precioFinal);
+        producto.put("categoria", "Combos");
+        producto.put("tipo_venta", "Unidad");
 
         db.collection("productos")
                 .add(producto)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "¡Combo agregado con éxito!", Toast.LENGTH_SHORT).show();
-                    cargarListaDesdeFirestore(); // Recarga la lista en el momento
+                    cargarListaDesdeFirestore();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Error al guardar el combo", Toast.LENGTH_SHORT).show();
                 });
+    }
+    private void confirmarYBorrarProducto(Producto producto) {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmar eliminación")
+                .setMessage("¿Estás seguro de que querés eliminar '" + producto.getNombre() + "'?")
+                .setPositiveButton("Sí, eliminar", (dialog, which) -> {
+                    if (producto.getId() != null && !producto.getId().isEmpty()) {
+                        db.collection("productos").document(producto.getId())
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(this, "¡Producto eliminado con éxito!", Toast.LENGTH_SHORT).show();
+                                    // Como estamos usando addSnapshotListener,
+                                    // la lista se va a actualizar sola en la pantalla al instante.
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Error al eliminar el producto", Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }

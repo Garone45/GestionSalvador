@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Si está seleccionado (fondo verde), el texto será BLANCO -->
+    <item android:state_selected="true" android:color="#FFFFFF"/>
+
+    <!-- En estado normal (fondo blanco), el texto será GRIS OSCURO -->
+    <item android:color="#333333"/>
+</selector>

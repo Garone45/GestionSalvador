@@ -66,7 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Filtros (Chips simulados con un Scroll) -->
+        <!-- Filtros (Chips modernos) -->
         <HorizontalScrollView
             android:id="@+id/scroll_filtros"
             android:layout_width="match_parent"
@@ -82,30 +82,42 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnTodas"
+                    android:id="@+id/btnCombos"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#1B4332"
-                    android:text="Todas"
-                    android:textColor="#FFFFFF" />
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_chip_filtro"
+                    android:text="Combos"
+                    android:textColor="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:paddingHorizontal="20dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
 
                 <Button
                     android:id="@+id/btnVerduras"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:backgroundTint="#F5F5F5"
+                    android:background="@drawable/bg_chip_filtro"
                     android:text="Verduras"
-                    android:textColor="#333333" />
+                    android:textColor="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:paddingHorizontal="20dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
 
                 <Button
                     android:id="@+id/btnFrutas"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:backgroundTint="#F5F5F5"
+                    android:background="@drawable/bg_chip_filtro"
                     android:text="Frutas"
-                    android:textColor="#333333" />
+                    android:textColor="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:paddingHorizontal="20dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"/>
             </LinearLayout>
         </HorizontalScrollView>
 

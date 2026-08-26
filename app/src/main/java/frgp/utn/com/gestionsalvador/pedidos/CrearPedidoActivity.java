@@ -38,6 +38,9 @@ public class CrearPedidoActivity extends AppCompatActivity {
     private TextView tvResumenCantidad;
     private TextView tvResumenTotal;
 
+    // Referencias a los botones de filtro modernos
+    private Button btnCombos, btnVerduras, btnFrutas;
+
     // Variables para controlar si estamos en modo edición
     private boolean esEdicion = false;
     private String pedidoIdEditando = null;
@@ -54,6 +57,11 @@ public class CrearPedidoActivity extends AppCompatActivity {
 
         tvResumenCantidad = findViewById(R.id.tv_cant_productos);
         tvResumenTotal = findViewById(R.id.tv_precio_total);
+
+        // Referencias a los botones de filtro en el XML
+        btnCombos = findViewById(R.id.btnCombos);
+        btnVerduras = findViewById(R.id.btnVerduras);
+        btnFrutas = findViewById(R.id.btnFrutas);
 
         // Verificamos si nos pasaron datos para saber si estamos editando
         if (getIntent().hasExtra("pedido_id_editar")) {
@@ -73,13 +81,21 @@ public class CrearPedidoActivity extends AppCompatActivity {
         ImageView btnVolver = findViewById(R.id.btn_volver);
         btnVolver.bringToFront();
 
-        Button btnTodas = findViewById(R.id.btnTodas);
-        Button btnVerduras = findViewById(R.id.btnVerduras);
-        Button btnFrutas = findViewById(R.id.btnFrutas);
+        // Configuración de los clics de los botones de filtro con gestión visual de selección
+        btnCombos.setOnClickListener(v -> {
+            actualizarSeleccionFiltro(btnCombos);
+            filtrarCategoria("Combos");
+        });
 
-        btnTodas.setOnClickListener(v -> filtrarCategoria("Todas"));
-        btnVerduras.setOnClickListener(v -> filtrarCategoria("Verduras"));
-        btnFrutas.setOnClickListener(v -> filtrarCategoria("Frutas"));
+        btnVerduras.setOnClickListener(v -> {
+            actualizarSeleccionFiltro(btnVerduras);
+            filtrarCategoria("Verduras");
+        });
+
+        btnFrutas.setOnClickListener(v -> {
+            actualizarSeleccionFiltro(btnFrutas);
+            filtrarCategoria("Frutas");
+        });
 
         btnVolver.setOnClickListener(v -> finish());
 
@@ -154,9 +170,11 @@ public class CrearPedidoActivity extends AppCompatActivity {
                             }
                         }
 
-                        // Por defecto, al arrancar mostramos todos los productos
-                        listaProductosMostrados.clear();
-                        listaProductosMostrados.addAll(listaProductosCompleta);
+                        // Por defecto arranca seleccionado "Combos" al abrir la pantalla
+                        btnCombos.setSelected(true);
+                        btnVerduras.setSelected(false);
+                        btnFrutas.setSelected(false);
+                        filtrarCategoria("Combos");
 
                         // Inicializamos el adaptador si es nulo, o le avisamos si ya existía
                         if (adaptador == null) {
@@ -206,18 +224,21 @@ public class CrearPedidoActivity extends AppCompatActivity {
     private void filtrarCategoria(String categoria) {
         listaProductosMostrados.clear();
 
-        if (categoria.equals("Todas")) {
-            listaProductosMostrados.addAll(listaProductosCompleta);
-        } else {
-            for (Producto p : listaProductosCompleta) {
-                if (p.getCategoria() != null && p.getCategoria().equalsIgnoreCase(categoria)) {
-                    listaProductosMostrados.add(p);
-                }
+        for (Producto p : listaProductosCompleta) {
+            if (p.getCategoria() != null && p.getCategoria().equalsIgnoreCase(categoria)) {
+                listaProductosMostrados.add(p);
             }
         }
 
         if (adaptador != null) {
             adaptador.notifyDataSetChanged();
         }
+    }
+
+    // Método auxiliar para cambiar el estado visual (seleccionado / no seleccionado) de los chips
+    private void actualizarSeleccionFiltro(Button botonSeleccionado) {
+        btnCombos.setSelected(botonSeleccionado == btnCombos);
+        btnVerduras.setSelected(botonSeleccionado == btnVerduras);
+        btnFrutas.setSelected(botonSeleccionado == btnFrutas);
     }
 }

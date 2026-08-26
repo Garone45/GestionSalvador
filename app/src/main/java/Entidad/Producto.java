@@ -1,6 +1,7 @@
 package Entidad;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.PropertyName;
 import java.io.Serializable;
 
 public class Producto implements Serializable {
@@ -8,11 +9,13 @@ public class Producto implements Serializable {
     @DocumentId
     private String id;
     private String nombre;
+
+    @PropertyName("precio_venta")
     private double precio_venta;
+
     private String categoria;
     private String tipo_venta;
 
-    // 3. ¡NUEVO! El campito para guardar cuánto eligió llevar
     private double cantidad = 0.0;
 
     public Producto() {
@@ -44,10 +47,12 @@ public class Producto implements Serializable {
         this.nombre = nombre;
     }
 
+    @PropertyName("precio_venta")
     public double getPrecio_venta() {
         return precio_venta;
     }
 
+    @PropertyName("precio_venta")
     public void setPrecio_venta(double precio_venta) {
         this.precio_venta = precio_venta;
     }
@@ -68,7 +73,6 @@ public class Producto implements Serializable {
         this.tipo_venta = tipo_venta;
     }
 
-    // Getters y Setters para la nueva cantidad
     public double getCantidad() {
         return cantidad;
     }

@@ -46,17 +46,21 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         // Mostramos la cantidad con nuestro formateador (para evitar el feo "1.0")
         holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
 
-        // Botón SUMAR: Ahora suma 0.5
+        // Determinamos el paso: si es Combo suma de a 1, si es Verdura/Fruta suma de a 0.5
+        boolean esCombo = productoActual.getCategoria() != null && productoActual.getCategoria().equalsIgnoreCase("Combos");
+        double paso = esCombo ? 1.0 : 0.5;
+
+        // Botón SUMAR
         holder.btnSumar.setOnClickListener(v -> {
-            productoActual.setCantidad(productoActual.getCantidad() + 0.5);
+            productoActual.setCantidad(productoActual.getCantidad() + paso);
             holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
             notificarCambio(); // Avisamos a la pantalla inferior
         });
 
-        // Botón RESTAR: Ahora resta 0.5
+        // Botón RESTAR
         holder.btnRestar.setOnClickListener(v -> {
-            if (productoActual.getCantidad() > 0) {
-                productoActual.setCantidad(productoActual.getCantidad() - 0.5);
+            if (productoActual.getCantidad() >= paso) {
+                productoActual.setCantidad(productoActual.getCantidad() - paso);
                 holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
                 notificarCambio(); // Avisamos a la pantalla inferior
             }
