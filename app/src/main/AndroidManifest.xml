@@ -45,6 +45,8 @@
 
         <activity android:name=".pedidos.HistorialPedidoActivity" android:exported="false" />
 
+        <activity android:name=".reportes.ReportesActivity" android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

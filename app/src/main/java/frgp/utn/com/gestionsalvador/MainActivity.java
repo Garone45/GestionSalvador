@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import frgp.utn.com.gestionsalvador.clientes.ClienteActivity;
 import frgp.utn.com.gestionsalvador.mercaderia.MercaderiaActivity;
 import frgp.utn.com.gestionsalvador.pedidos.PedidoActivity;
+import frgp.utn.com.gestionsalvador.reportes.ReportesActivity;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,16 +51,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // NUEVO: Botón Reportes y Caja Diaria
+        // BOTÓN REPORTES Y CAJA DIARIA (¡Activado!)
         Button btnReportes = findViewById(R.id.btnReportes);
         btnReportes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Próximamente: Panel de Reportes", Toast.LENGTH_SHORT).show();
-
-                // Más adelante, cuando creemos la Activity de reportes, será así:
-                // Intent intent = new Intent(MainActivity.this, ReportesActivity.class);
-                // startActivity(intent);
+                // Reemplazamos el Toast por el Intent que viaja a la pantalla de reporte
+                Intent intent = new Intent(MainActivity.this, ReportesActivity.class); // Cambiá "ReporteActivity" si tu clase se llama distinto
+                startActivity(intent);
             }
         });
     }

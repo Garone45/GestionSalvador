@@ -1,9 +1,13 @@
 package Entidad;
 
 import com.google.firebase.firestore.DocumentId;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-public class    Pedido {
+public class Pedido {
 
     @DocumentId
     private String id;
@@ -112,5 +116,28 @@ public class    Pedido {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    // ==========================================
+    // MÉTODO AUXILIAR PARA LOS REPORTES
+    // ==========================================
+    // Convierte el String de la fecha en un objeto Date para poder filtrarlo
+    public Date getFechaDate() {
+        if (fecha == null || fecha.isEmpty()) {
+            return null;
+        }
+
+        // Intentamos con formato estándar (ej: dd/MM/yyyy o similar)
+        String[] formatos = {"dd/MM/yyyy", "yyyy-MM-dd", "dd-MM-yyyy", "yyyy/MM/dd"};
+
+        for (String formato : formatos) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(formato, Locale.getDefault());
+                return sdf.parse(fecha);
+            } catch (ParseException e) {
+                // Si falla con este formato, prueba con el siguiente
+            }
+        }
+        return null;
     }
 }

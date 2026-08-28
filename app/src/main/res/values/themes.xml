@@ -5,11 +5,11 @@
         <item name="colorPrimary">#2D6A4F</item>
         <item name="colorPrimaryVariant">#1B4332</item>
 
-        <!-- Color de la barra de navegación inferior -->
-        <item name="android:navigationBarColor">#1B4332</item>
+        <!-- Color de la barra de navegación inferior (Blanco igual al panel de resumen) -->
+        <item name="android:navigationBarColor">#FFFFFF</item>
 
-        <!-- 👇 ¡ESTA ES LA CLAVE! Evita que Android la blanquee a la fuerza 👇 -->
-        <item name="android:windowLightNavigationBar">false</item>
+        <!-- 👇 ¡ESTA ES LA CLAVE! Al estar en true, los 3 botones del sistema se ponen OSCUROS para que se vean contra el blanco 👇 -->
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.GestionSalvador" parent="Base.Theme.GestionSalvador" />

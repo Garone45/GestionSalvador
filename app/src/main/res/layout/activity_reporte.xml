@@ -17,6 +17,8 @@
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
 
+
+
     <!-- Selector de Rango -->
     <RadioGroup
         android:id="@+id/rgFiltros"
@@ -45,5 +47,17 @@
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Recaudado" android:textSize="16sp"/>
             <TextView android:id="@+id/tvTotalReporte" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$ 0.00" android:textSize="36sp" android:textStyle="bold" android:textColor="#2D6A4F"/>
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/btnVolver"
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_back"
+        app:tint="#2D6A4F"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Volver atrás" />
+
 </LinearLayout>
