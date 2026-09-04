@@ -55,6 +55,7 @@ public class MercaderiaActivity extends AppCompatActivity {
         ImageView btnVolverHeader = findViewById(R.id.btn_volver_mercaderia);
         btnVolverHeader.setOnClickListener(v -> finish());
 
+
         // 2. Botón de abajo "Agregar Producto" (Abre la ventanita flotante)
         Button btnAgregarProducto = findViewById(R.id.btn_agregar_producto);
         btnAgregarProducto.setOnClickListener(v -> {
@@ -184,5 +185,10 @@ public class MercaderiaActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    public void clickVolver(View view) {
+        Toast.makeText(this, "CLICK POR XML", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

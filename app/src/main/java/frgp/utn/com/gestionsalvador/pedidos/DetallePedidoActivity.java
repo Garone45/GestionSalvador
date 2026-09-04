@@ -140,34 +140,60 @@ public class DetallePedidoActivity extends AppCompatActivity {
         RecyclerView recycler = dialogView.findViewById(R.id.recyclerDialogPicking);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
-        // 3. Convertimos la lista de objetos Producto a una lista de Strings legibles para Javi
+        // 3. Convertimos la lista de objetos Producto a texto legible
         List<String> textosParaPicking = new ArrayList<>();
         for (Producto p : listaProductosPedido) {
-            String linea = p.getCantidad() + " - " + p.getNombre();
-            textosParaPicking.add(linea);
+            String cantStr = (p.getCantidad() == (long) p.getCantidad())
+                    ? String.valueOf((long) p.getCantidad())
+                    : String.valueOf(p.getCantidad());
+            textosParaPicking.add(cantStr + " - " + p.getNombre());
         }
 
-        // 4. Conectamos nuestro adaptador con casillas de verificación
-        PickingAdapter adapter = new PickingAdapter(textosParaPicking);
+        // 4. Referencia al botón finalizar para alternar texto y color
+        Button btnFinalizar = dialogView.findViewById(R.id.btnFinalizarArmado);
+
+        String estadoActual = getIntent().getStringExtra("estado_pedido");
+        boolean arrancarTildados = "Armado".equalsIgnoreCase(estadoActual);
+
+        // 5. Conectamos el adaptador con los 3 argumentos requeridos
+        PickingAdapter adapter = new PickingAdapter(textosParaPicking, arrancarTildados, estanTodos -> {
+            if (estanTodos) {
+                btnFinalizar.setText("Guardar como Armado");
+                btnFinalizar.setBackgroundColor(android.graphics.Color.parseColor("#2D6A4F"));
+            } else {
+                btnFinalizar.setText("Guardar como Pendiente");
+                btnFinalizar.setBackgroundColor(android.graphics.Color.parseColor("#C0392B"));
+            }
+        });
         recycler.setAdapter(adapter);
 
-        // 5. Construimos y mostramos el AlertDialog
+        // Seteo visual inicial del botón
+        if (adapter.estanTodosMarcados()) {
+            btnFinalizar.setText("Guardar como Armado");
+            btnFinalizar.setBackgroundColor(android.graphics.Color.parseColor("#2D6A4F"));
+        } else {
+            btnFinalizar.setText("Guardar como Pendiente");
+            btnFinalizar.setBackgroundColor(android.graphics.Color.parseColor("#C0392B"));
+        }
+
+        // 6. Construimos el AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        // 6. Botón para finalizar el armado desde el diálogo
-        Button btnFinalizar = dialogView.findViewById(R.id.btnFinalizarArmado);
+        // 7. Click para persistir en Firestore
         btnFinalizar.setOnClickListener(v -> {
             if (pedidoId != null && !pedidoId.isEmpty()) {
+                String nuevoEstado = adapter.estanTodosMarcados() ? "Armado" : "Pendiente";
+
                 FirebaseFirestore.getInstance()
                         .collection("pedidos")
                         .document(pedidoId)
-                        .update("estado", "Armado")
+                        .update("estado", nuevoEstado)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(this, "¡Pedido armado con éxito!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss(); // Cierra el diálogo
-                            finish(); // Cierra el detalle y vuelve automáticamente a la lista de pedidos
+                            Toast.makeText(this, "Pedido guardado como: " + nuevoEstado, Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            finish();
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(this, "Error al actualizar el estado", Toast.LENGTH_SHORT).show();
@@ -177,7 +203,6 @@ public class DetallePedidoActivity extends AppCompatActivity {
             }
         });
 
-        // 7. ¡Mostramos la ventana en pantalla!
         dialog.show();
     }
 }

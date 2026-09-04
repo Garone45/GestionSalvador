@@ -80,4 +80,31 @@ public class Producto implements Serializable {
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
+    // Devuelve el salto de cantidad según cómo se vende
+    public double getPasoCantidad() {
+        if ("KG".equalsIgnoreCase(tipo_venta)) {
+            return 0.5; // Kilos suben/bajan de a medio kilo
+        }
+        return 1.0; // Paquete y Unidad suben/bajan de a 1 entero
+    }
+
+    // Devuelve el texto formateado para mostrar en pantalla o tickets
+    public String getTextoCantidad() {
+        if ("KG".equalsIgnoreCase(tipo_venta)) {
+            // Ej: "1.5 kg" o "0.5 kg"
+            return String.format(java.util.Locale.US, "%.1f kg", cantidad);
+        } else if ("PAQUETE".equalsIgnoreCase(tipo_venta)) {
+            // Ej: "2 paq."
+            return String.format(java.util.Locale.US, "%.0f paq.", cantidad);
+        } else {
+            // Ej: "3 un."
+            return String.format(java.util.Locale.US, "%.0f un.", cantidad);
+        }
+    }
+
+    // Devuelve si permite o no decimales
+    public boolean permiteDecimales() {
+        return "KG".equalsIgnoreCase(tipo_venta);
+    }
+
 }

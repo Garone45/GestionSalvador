@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 import Entidad.Producto;
 import frgp.utn.com.gestionsalvador.R;
@@ -15,14 +16,12 @@ import frgp.utn.com.gestionsalvador.R;
 public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoViewHolder> {
 
     private List<Producto> listaProductos;
-    private OnCarritoChangeListener listener; // Nuestro "walkie-talkie"
+    private OnCarritoChangeListener listener;
 
-    // 1. Modificamos la interfaz: cantidadTotal ahora es double para soportar fracciones
     public interface OnCarritoChangeListener {
         void onCarritoCambiado(double cantidadTotal, double precioTotal);
     }
 
-    // 2. Constructor
     public PedidoAdapter(List<Producto> listaProductos, OnCarritoChangeListener listener) {
         this.listaProductos = listaProductos;
         this.listener = listener;
@@ -41,35 +40,98 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         Producto productoActual = listaProductos.get(position);
 
         holder.tvNombre.setText(productoActual.getNombre());
-        holder.tvPrecio.setText("$ " + productoActual.getPrecio_venta());
 
-        // Mostramos la cantidad con nuestro formateador (para evitar el feo "1.0")
-        holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
+        // Mostramos el precio con su unidad de referencia (ej: $ 1200 / kg o $ 800 / paq.)
+        String sufijoPrecio = obtenerSufijoPrecio(productoActual);
+        holder.tvPrecio.setText("$ " + productoActual.getPrecio_venta() + sufijoPrecio);
 
-        // Determinamos el paso: si es Combo suma de a 1, si es Verdura/Fruta suma de a 0.5
-        boolean esCombo = productoActual.getCategoria() != null && productoActual.getCategoria().equalsIgnoreCase("Combos");
-        double paso = esCombo ? 1.0 : 0.5;
+        // Mostramos la cantidad con el formato correspondiente
+        holder.tvCantidad.setText(formatearCantidadVisual(productoActual));
+
+        // Determinamos el paso de suma/resta según el tipo de venta
+        double paso = obtenerPaso(productoActual);
 
         // Botón SUMAR
         holder.btnSumar.setOnClickListener(v -> {
             productoActual.setCantidad(productoActual.getCantidad() + paso);
-            holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
-            notificarCambio(); // Avisamos a la pantalla inferior
+            holder.tvCantidad.setText(formatearCantidadVisual(productoActual));
+            notificarCambio();
         });
 
         // Botón RESTAR
         holder.btnRestar.setOnClickListener(v -> {
             if (productoActual.getCantidad() >= paso) {
-                productoActual.setCantidad(productoActual.getCantidad() - paso);
-                holder.tvCantidad.setText(formatearNumero(productoActual.getCantidad()));
-                notificarCambio(); // Avisamos a la pantalla inferior
+                // Redondeo de seguridad para evitar errores de precisión en double (ej: 0.5000000001)
+                double nuevaCant = Math.round((productoActual.getCantidad() - paso) * 10.0) / 10.0;
+                productoActual.setCantidad(nuevaCant);
+                holder.tvCantidad.setText(formatearCantidadVisual(productoActual));
+                notificarCambio();
             }
         });
     }
 
-    // 3. Modificamos la suma para que cuente decimales
+    // Calcula si suma de a 0.5 o de a 1.0
+    private double obtenerPaso(Producto p) {
+        if (p.getCategoria() != null && p.getCategoria().equalsIgnoreCase("Combos")) {
+            return 1.0;
+        }
+
+        if (p.getTipo_venta() != null) {
+            String tipo = p.getTipo_venta().trim().toUpperCase();
+            if (tipo.equals("KG") || tipo.equals("KILO") || tipo.equals("KILOS")) {
+                return 0.5; // Solo los kilos suben de a medio
+            }
+        }
+        return 1.0; // PAQUETE, UNIDAD o combos van de a 1 entero
+    }
+
+    // Muestra "0.5 kg", "1 kg", "2 paq." o "1 un."
+    private String formatearCantidadVisual(Producto p) {
+        double cant = p.getCantidad();
+        String tipo = p.getTipo_venta() != null ? p.getTipo_venta().trim().toUpperCase() : "";
+
+        if (tipo.equals("KG") || tipo.equals("KILO") || tipo.equals("KILOS")) {
+            if (cant == (long) cant) {
+                return String.format(Locale.US, "%d kg", (long) cant);
+            } else {
+                return String.format(Locale.US, "%.1f kg", cant);
+            }
+        } else if (tipo.equals("PAQUETE") || tipo.equals("PAQ")) {
+            return String.format(Locale.US, "%d paq.", (long) cant);
+        } else if (tipo.equals("UNIDAD") || tipo.equals("UN")) {
+            return String.format(Locale.US, "%d un.", (long) cant);
+        } else {
+            // Por defecto si no tiene tipo asignado o es combo
+            if (cant == (long) cant) {
+                return String.format(Locale.US, "%d", (long) cant);
+            } else {
+                return String.format(Locale.US, "%.1f", cant);
+            }
+        }
+    }
+
+    // Sufijo para el TextView del precio
+    private String obtenerSufijoPrecio(Producto p) {
+        if (p.getTipo_venta() == null) return "";
+        String tipo = p.getTipo_venta().trim().toUpperCase();
+        switch (tipo) {
+            case "KG":
+            case "KILO":
+            case "KILOS":
+                return " / kg";
+            case "PAQUETE":
+            case "PAQ":
+                return " / paq.";
+            case "UNIDAD":
+            case "UN":
+                return " / un.";
+            default:
+                return "";
+        }
+    }
+
     private void notificarCambio() {
-        double totalItems = 0.0; // Cambiado a double
+        double totalItems = 0.0;
         double totalDinero = 0.0;
 
         for (Producto p : listaProductos) {
@@ -85,15 +147,6 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     @Override
     public int getItemCount() {
         return listaProductos.size();
-    }
-
-    // Función auxiliar para que se vea "1" en lugar de "1.0", pero "0.5" quede igual
-    private String formatearNumero(double numero) {
-        if (numero == (long) numero) {
-            return String.format("%d", (long) numero);
-        } else {
-            return String.valueOf(numero);
-        }
     }
 
     public static class PedidoViewHolder extends RecyclerView.ViewHolder {

@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#2D6A4F"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:fitsSystemWindows="true">
 
         <!-- Botón de volver (Alineado a la izquierda y centrado verticalmente) -->
         <ImageView
@@ -20,7 +21,12 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="clickVolver"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
+            android:elevation="10dp"
             android:contentDescription="Volver"
             app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
